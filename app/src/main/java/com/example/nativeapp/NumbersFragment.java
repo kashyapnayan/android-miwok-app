@@ -1,27 +1,34 @@
 package com.example.nativeapp;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class NumbersActivity extends AppCompatActivity {
+public class NumbersFragment extends Fragment {
 
     /** Handles playback of all the sound files */
     private MediaPlayer mMediaPlayer;
 
     /** Handles audio focus when playing a sound file */
     private AudioManager mAudioManager;
+
+    public NumbersFragment() {
+        // Required empty public constructor
+    }
 
     /**
      * This listener gets triggered whenever the audio focus changes
@@ -64,12 +71,19 @@ public class NumbersActivity extends AppCompatActivity {
         }
     };
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_numbers);
 
-        mAudioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View rootView = inflater.inflate(R.layout.word_list, container, false);
+
+        mAudioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
 
         ArrayList<Word> words = new ArrayList<Word>();
         words.add(new Word("One", "Lutti", R.drawable.ic_launcher_foreground, R.raw.number_one));
@@ -83,9 +97,9 @@ public class NumbersActivity extends AppCompatActivity {
         words.add(new Word("Nine", "Wo’e", R.drawable.ic_launcher_foreground, R.raw.number_one));
         words.add(new Word("Ten", "Na’aacha", R.drawable.ic_launcher_foreground, R.raw.number_one));
 
-        WordAdapter itemsAdapter = new WordAdapter(this, words, R.color.category_numbers);
+        WordAdapter itemsAdapter = new WordAdapter(getActivity(), words, R.color.category_numbers);
 
-        ListView listView = (ListView) findViewById(R.id.list);
+        ListView listView = (ListView) rootView.findViewById(R.id.list);
 
         listView.setAdapter(itemsAdapter);
 
@@ -109,7 +123,7 @@ public class NumbersActivity extends AppCompatActivity {
 
                     // Create and setup the {@link MediaPlayer} for the audio resource associated
                     // with the current word
-                    mMediaPlayer = MediaPlayer.create(NumbersActivity.this, word.getAudioResourceId());
+                    mMediaPlayer = MediaPlayer.create(getActivity(), word.getAudioResourceId());
 
                     // Start the audio file
                     mMediaPlayer.start();
@@ -120,10 +134,11 @@ public class NumbersActivity extends AppCompatActivity {
                 }
             }
         });
+        return  rootView;
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         // When the activity is stopped, release the media player resources because we won't
         // be playing any more sounds.
