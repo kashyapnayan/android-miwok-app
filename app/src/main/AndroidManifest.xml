@@ -10,18 +10,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NativeApp">
-        <activity android:name=".PhrasesActivity"
-            android:label="@string/category_phrases"
-            android:theme="@style/AppTheme"/>
-        <activity android:name=".ColorsActivity"
-            android:label="@string/category_colors"
-            android:theme="@style/AppTheme"/>
-        <activity android:name=".FamilyActivity"
-            android:label="@string/category_family"
-            android:theme="@style/AppTheme"/>
-        <activity android:name=".NumbersActivity"
-            android:label="@string/category_numbers"
-            android:theme="@style/AppTheme"/>
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme"
